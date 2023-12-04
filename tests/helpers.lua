@@ -106,17 +106,17 @@ M.reset_rh = function()
   rh._reset_state()
 end
 
----Performs the rh.jump through a keymap
+---Performs the rh.hop through a keymap
 ---@param direction "forward"|"backward"
 ---@param offset "pre"|"post"|"none"
 ---@param pattern string
-M.jump = function(direction, offset, pattern)
-  local jump_options = {}
-  jump_options.direction = direction
-  jump_options.offset = offset
-  jump_options.pattern = pattern
+M.hop = function(direction, offset, pattern)
+  local hop_options = {}
+  hop_options.direction = direction
+  hop_options.offset = offset
+  hop_options.pattern = pattern
 
-  M.perform_through_keymap(rh.jump, true, jump_options)
+  M.perform_through_keymap(rh.hop, true, hop_options)
 end
 
 ---Performs a given function with given arguments through a keymap

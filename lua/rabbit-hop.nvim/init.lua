@@ -1,17 +1,17 @@
-local jump = require("rabbit-hop.jump")
-local new_jump_options_manager = require("rabbit-hop.jump-options-manager").new
+local hop = require("rabbit-hop.hop")
+local new_hop_options_manager = require("rabbit-hop.hop-options-manager").new
 
 local M = {}
 
 M._reset_state = function()
-  M._jump_options_manager = new_jump_options_manager()
+  M._hop_options_manager = new_hop_options_manager()
 end
 M._reset_state()
 
----@param opts RH_UserJumpOptions
-M.jump = function(opts)
-  local jump_options = M._jump_options_manager.get_from_user_options(opts)
-  jump(jump_options)
+---@param opts RH_UserHopOptions
+M.hop = function(opts)
+  local hop_options = M._hop_options_manager.get_from_user_options(opts)
+  hop(hop_options)
 end
 
 return M

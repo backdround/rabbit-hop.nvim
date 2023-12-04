@@ -35,7 +35,7 @@ end
 ---@field start_position RH_Position
 ---@field end_position RH_Position
 
----@param opts RH_JumpOptions
+---@param opts RH_HopOptions
 ---@param n_is_pointable boolean position can point to a "\n"
 ---@return RH_Pattern|nil
 local function search_target_pattern(opts, n_is_pointable)
@@ -89,7 +89,7 @@ local function search_target_pattern(opts, n_is_pointable)
   return found_pattern
 end
 
----@param opts RH_JumpOptions
+---@param opts RH_HopOptions
 ---@param n_is_pointable boolean position can point to a "\n"
 ---@return RH_Position|nil
 local function search_target_position(opts, n_is_pointable)
@@ -129,15 +129,15 @@ local function search_target_position(opts, n_is_pointable)
   end
 end
 
----Options that describe the jump behaviour.
----@class RH_JumpOptions
+---Options that describe the hop behaviour.
+---@class RH_HopOptions
 ---@field direction "forward"|"backward" direction to search a given pattern
 ---@field offset "pre"|"post"|"none" offset to cursor to place
 ---@field pattern string pattern to search
----@field count number count of jumps to perform
+---@field count number count of hops to perform
 
----Performs a jump to a given pattern
----@param opts RH_JumpOptions
+---Performs a hop to a given pattern
+---@param opts RH_HopOptions
 local perform = function(opts)
   local n_is_pointable = utils.mode() ~= "normal"
   local target_position = search_target_position(opts, n_is_pointable)
