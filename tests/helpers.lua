@@ -102,10 +102,6 @@ M.set_cursor = function(line, column)
   vim.api.nvim_win_set_cursor(0, { line, column })
 end
 
-M.reset_rh = function()
-  rh._reset_state()
-end
-
 ---Performs the rh.hop through a keymap
 ---@param direction "forward"|"backward"
 ---@param offset "pre"|"start"|"end"|"post"
