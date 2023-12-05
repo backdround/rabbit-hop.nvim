@@ -2,7 +2,7 @@ local h = require("tests.helpers")
 
 require("tests.custom-asserts").register()
 
-describe("multiline-jump", function()
+describe("multiline-hop", function()
   before_each(h.get_preset([[
     a = <pattern> words here
     |
