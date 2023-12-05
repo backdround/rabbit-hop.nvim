@@ -5,6 +5,18 @@ local utils = require("rabbit-hop.hop.position.utils")
 local position_metatable = {
   __eq = function(p1, p2)
     return p1.line == p2.line and p1.column == p2.column
+  end,
+
+  __lt = function(p1, p2)
+    if p1.line < p2.line then
+      return true
+    end
+
+    if p1.line == p2.line and p1.column < p2.column then
+      return true
+    end
+
+    return false
   end
 }
 

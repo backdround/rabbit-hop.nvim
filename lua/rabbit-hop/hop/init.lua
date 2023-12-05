@@ -2,46 +2,84 @@ local utils = require("rabbit-hop.utils")
 local position = require("rabbit-hop.hop.position")
 local search_pattern = require("rabbit-hop.hop/search-pattern")
 
+---@param pattern_position RH_PatternPosition
+---@param direction "forward"|"backward"
+---@param offset "pre"|"start"|"end"|"post"
+---@return RH_Position
+local function get_position_from_pattern(pattern_position, direction, offset)
+  local pattern_start = vim.deepcopy(pattern_position.start_position)
+  local pattern_end = vim.deepcopy(pattern_position.end_position)
+
+  if direction == "forward" then
+    if offset == "pre" then
+      pattern_start.backward_once()
+      return pattern_start
+    elseif offset == "start" then
+      return pattern_start
+    elseif offset == "end" then
+      return pattern_end
+    elseif offset == "post" then
+      pattern_end.forward_once()
+      return pattern_end
+    end
+  end
+
+  if direction == "backward" then
+    if offset == "pre" then
+      pattern_end.forward_once()
+      return pattern_end
+    elseif offset == "end" then
+      return pattern_end
+    elseif offset == "start" then
+      return pattern_start
+    elseif offset == "post" then
+      pattern_start.backward_once()
+      return pattern_start
+    end
+  end
+
+  error(
+    ("Unknown direction or offset: %s %s"):format(
+      tostring(direction),
+      tostring(offset)
+    )
+  )
+end
+
 ---@param opts RH_HopOptions
 ---@param n_is_pointable boolean position can point to a "\n"
 ---@return RH_Position|nil
 local function search_target_position(opts, n_is_pointable)
-  local target_pattern = search_pattern(opts, n_is_pointable)
+  local initial_position = position.from_cursor(n_is_pointable)
+
+  ---@param potential_pattern_position RH_PatternPosition
+  ---@return boolean
+  local is_pattern_position_suitable = function(potential_pattern_position)
+    local potential_position = get_position_from_pattern(
+      potential_pattern_position,
+      opts.direction,
+      opts.offset
+    )
+
+    if opts.direction == "forward" then
+      return potential_position > initial_position
+    end
+    return potential_position < initial_position
+  end
+
+  local target_pattern = search_pattern(
+    opts.pattern,
+    opts.direction,
+    opts.count,
+    is_pattern_position_suitable,
+    n_is_pointable
+  )
 
   if not target_pattern then
     return nil
   end
 
-  local pattern_start = target_pattern.start_position
-  local pattern_end = target_pattern.end_position
-
-  if opts.direction == "forward" then
-    if opts.offset == "pre" then
-      pattern_start.backward_once()
-      return pattern_start
-    elseif opts.offset == "start" then
-      return pattern_start
-    elseif opts.offset == "end" then
-      return pattern_end
-    elseif opts.offset == "post" then
-      pattern_end.forward_once()
-      return pattern_end
-    end
-  end
-
-  if opts.direction == "backward" then
-    if opts.offset == "pre" then
-      pattern_end.forward_once()
-      return pattern_end
-    elseif opts.offset == "end" then
-      return pattern_end
-    elseif opts.offset == "start" then
-      return pattern_start
-    elseif opts.offset == "post" then
-      pattern_start.backward_once()
-      return pattern_start
-    end
-  end
+  return get_position_from_pattern(target_pattern, opts.direction, opts.offset)
 end
 
 ---Options that describe the hop behaviour.
