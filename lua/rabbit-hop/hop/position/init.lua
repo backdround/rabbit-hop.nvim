@@ -108,4 +108,11 @@ M.from_cursor = function(n_is_pointable)
   return new_position(position[1], position[2], n_is_pointable)
 end
 
+---Creates RH_Position from an existing RH_Position
+---@param p RH_Position
+---@return RH_Position
+M.copy = function(p)
+  return new_position(p.line, p.column, p.n_is_pointable)
+end
+
 return M

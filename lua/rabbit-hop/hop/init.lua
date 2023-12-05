@@ -7,8 +7,8 @@ local search_pattern = require("rabbit-hop.hop/search-pattern")
 ---@param offset "pre"|"start"|"end"|"post"
 ---@return RH_Position
 local function get_position_from_pattern(pattern_position, direction, offset)
-  local pattern_start = vim.deepcopy(pattern_position.start_position)
-  local pattern_end = vim.deepcopy(pattern_position.end_position)
+  local pattern_start = position.copy(pattern_position.start_position)
+  local pattern_end = position.copy(pattern_position.end_position)
 
   if direction == "forward" then
     if offset == "pre" then
