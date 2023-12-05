@@ -108,7 +108,7 @@ end
 
 ---Performs the rh.hop through a keymap
 ---@param direction "forward"|"backward"
----@param offset "pre"|"post"|"none"
+---@param offset "pre"|"start"|"end"|"post"
 ---@param pattern string
 M.hop = function(direction, offset, pattern)
   local hop_options = {}
