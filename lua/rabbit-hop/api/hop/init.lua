@@ -1,6 +1,6 @@
-local utils = require("rabbit-hop.utils")
-local position = require("rabbit-hop.hop.position")
-local search_pattern = require("rabbit-hop.hop/search-pattern")
+local utils = require("rabbit-hop.api.utils")
+local position = require("rabbit-hop.api.hop.position")
+local search_pattern = require("rabbit-hop.api.hop/search-pattern")
 
 ---@param pattern_position RH_PatternPosition
 ---@param direction "forward"|"backward"
