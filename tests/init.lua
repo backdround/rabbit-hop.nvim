@@ -12,10 +12,7 @@ local function system(command, description)
 end
 
 local function get_project_root()
-  local get_git_root_command = { "git", "rev-parse", "--show-toplevel" }
-  local root = system(get_git_root_command, "get git root")
-  root = root:gsub("\n$", "")
-  return root
+  return vim.fn.getcwd()
 end
 
 local function get_cache_path()

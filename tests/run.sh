@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT="$(cd "$(dirname "$0")" && git rev-parse --show-toplevel)"
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_ROOT"
 
 PLENARY_OPTIONS="{ minimal_init = './tests/init.lua', sequential = true }"
