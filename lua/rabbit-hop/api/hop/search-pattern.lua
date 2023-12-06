@@ -1,4 +1,4 @@
-local position = require("rabbit-hop.api.hop.position")
+local position = require(RH_ROOT .. ".api.hop.position")
 
 ---@class RH_PatternPosition
 ---@field start_position RH_Position

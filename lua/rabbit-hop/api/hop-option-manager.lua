@@ -1,5 +1,5 @@
-local user_options_utils = require("rabbit-hop.api.user-options-utils")
-local utils = require("rabbit-hop.api.utils")
+local user_options_utils = require(RH_ROOT .. ".api.user-options-utils")
+local utils = require(RH_ROOT .. ".api.utils")
 
 ---@return RH_HopOptionManager
 local new = function()

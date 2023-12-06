@@ -1,4 +1,4 @@
-local utils = require("rabbit-hop.api.hop.position.utils")
+local utils = require(RH_ROOT .. ".api.hop.position.utils")
 
 -- It won't work if getmetatable(p1) ~= getmetatable(p2).
 -- That's why it isn't declared near the usage place.
