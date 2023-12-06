@@ -4,9 +4,15 @@ local utils = require("rabbit-hop.utils")
 ---@return RH_HopOptionsManager
 local new = function()
   ---@class RH_HopOptionsManager
+  ---@field _last_hop_options? RH_HopOptions
   local manager = {
-    _dot_repetition_cache = {},
+    _last_hop_options = nil,
   }
+
+  ---@return RH_HopOptions|nil
+  manager.get_last_hop_options = function()
+    return manager._last_hop_options
+  end
 
   ---@param user_options RH_UserHopOptions
   ---@return RH_HopOptions
@@ -23,7 +29,7 @@ local new = function()
 
     -- Get pattern
     if utils.is_vim_repeat() then
-      hop_options.pattern = manager._dot_repetition_cache.pattern
+      hop_options.pattern = manager._last_hop_options.pattern
     elseif user_options.pattern ~= nil then
       hop_options.pattern = user_options.pattern
     end
@@ -32,13 +38,13 @@ local new = function()
     if vim.v.count ~= 0 then
       hop_options.count = vim.v.count
     elseif utils.is_vim_repeat() then
-      hop_options.count = manager._dot_repetition_cache.count
+      hop_options.count = manager._last_hop_options.count
     else
       hop_options.count = 1
     end
 
     -- Save caches
-    manager._dot_repetition_cache = hop_options
+    manager._last_hop_options = hop_options
 
     return hop_options
   end
