@@ -1,9 +1,9 @@
 local user_options_utils = require("rabbit-hop.api.user-options-utils")
 local utils = require("rabbit-hop.api.utils")
 
----@return RH_HopOptionsManager
+---@return RH_HopOptionManager
 local new = function()
-  ---@class RH_HopOptionsManager
+  ---@class RH_HopOptionManager
   ---@field _last_hop_options? RH_HopOptions
   local manager = {
     _last_hop_options = nil,
