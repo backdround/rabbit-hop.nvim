@@ -32,4 +32,18 @@ describe("dot `.` repeat", function()
     vim.api.nvim_feedkeys("3.", "nx", false)
     assert.buffer("<a>")
   end)
+
+  it("should use last operator-pending v:count hop", function()
+    vim.api.nvim_feedkeys("2d", "n", false)
+    h.hop("forward", "pre", pattern)
+    assert.buffer("<a> <a> <a> <a>")
+    h.set_cursor(1, 0)
+
+    vim.api.nvim_feedkeys("3", "n", false)
+    h.hop("forward", "pre", pattern)
+    h.set_cursor(1, 0)
+
+    vim.api.nvim_feedkeys(".", "nx", false)
+    assert.buffer("<a> <a>")
+  end)
 end)

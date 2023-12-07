@@ -1,6 +1,18 @@
-local utils = require(RH_ROOT .. ".api.utils")
 local position = require(RH_ROOT .. ".api.hop.position")
 local search_pattern = require(RH_ROOT .. ".api.hop/search-pattern")
+
+---@return "operator-pending"|"visual"|"normal"
+local mode = function()
+  local m = tostring(vim.fn.mode(true))
+
+  if m:find("o") then
+    return "operator-pending"
+  elseif m:find("[vV]") then
+    return "visual"
+  else
+    return "normal"
+  end
+end
 
 ---@param pattern_position RH_PatternPosition
 ---@param direction "forward"|"backward"
@@ -92,7 +104,7 @@ end
 ---Performs a hop to a given pattern
 ---@param opts RH_HopOptions
 local perform = function(opts)
-  local n_is_pointable = utils.mode() ~= "normal"
+  local n_is_pointable = mode() ~= "normal"
   local target_position = search_target_position(opts, n_is_pointable)
 
   if not target_position then
@@ -100,14 +112,14 @@ local perform = function(opts)
   end
 
   if
-    utils.mode() == "visual"
+    mode() == "visual"
     and vim.go.selection == "exclusive"
     and opts.direction == "forward"
   then
     target_position.forward_once()
   end
 
-  if utils.mode() ~= "operator-pending" then
+  if mode() ~= "operator-pending" then
     target_position.set_cursor()
     return
   end

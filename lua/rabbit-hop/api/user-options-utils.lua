@@ -34,30 +34,40 @@ local assert_offset = function(offset)
   end
 end
 
----Options that a user gives
----@class RH_UserHopOptions
----@field direction "forward"|"backward"|nil direction to search a given pattern
----@field offset "pre"|"start"|"end"|"post"|nil offset to cursor to place
----@field pattern string pattern to search
-
----Asserts all the fields of the options
----@param options RH_UserHopOptions
-M.assert = function(options)
-  assert_direction(options.direction)
-  assert_pattern(options.pattern)
-  assert_offset(options.offset)
+local assert_count = function(count)
+  if count ~= nil and type(count) ~= "number" then
+    error("count must be a number, but it is: " .. tostring(type(count)))
+  end
 end
 
----Fills empty fields with default values
+---Options that an api user gives
+---@class RH_UserHopOptions
+---@field pattern string pattern to search
+---@field direction? "forward"|"backward" direction to search a given pattern
+---@field offset? "pre"|"start"|"end"|"post" offset to cursor to place
+---@field count number? count of hops to perform
+
+---Checks and fills empty fields with default values
 ---@param options RH_UserHopOptions
-M.fill_default = function(options)
-  if options.direction == nil then
-    options.direction = "forward"
+---@return RH_HopOptions
+M.get_hop_options = function(options)
+  if type(options) ~= "table" then
+    error("hop options must be a table, but it is: " .. tostring(type(options)))
   end
 
-  if options.offset == nil then
-    options.offset = "start"
-  end
+  assert_pattern(options.pattern)
+  assert_direction(options.direction)
+  assert_offset(options.offset)
+  assert_count(options.count)
+
+  local default = {
+    direction = "forward",
+    offset = "start",
+    count = 1
+  }
+
+  local hop_options = vim.tbl_extend("force", default, options)
+  return hop_options
 end
 
 return M

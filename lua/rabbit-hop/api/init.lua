@@ -1,22 +1,37 @@
 local hop = require(RH_ROOT .. ".api.hop")
-local new_hop_option_manager = require(RH_ROOT .. ".api.hop-option-manager").new
+local user_options_utils = require(RH_ROOT .. ".api.user-options-utils")
 
 local M = {}
 
+---@return boolean
+local is_operator_pending_mode = function()
+  return vim.fn.mode(true):find("o") ~= nil
+end
+
 M.reset_state = function()
-  M._hop_option_manager = new_hop_option_manager()
+  M._last_hop_options = nil
+  M._last_operator_pending_hop_options = nil
 end
 M.reset_state()
 
 ---@param user_options RH_UserHopOptions
 M.hop = function(user_options)
-  local hop_options = M._hop_option_manager.get_from_user_options(user_options)
+  local hop_options = user_options_utils.get_hop_options(user_options)
+  M._last_hop_options = hop_options
+  if is_operator_pending_mode() then
+    M._last_operator_pending_hop_options = hop_options
+  end
   hop(hop_options)
 end
 
 ---@return RH_HopOptions|nil
 M.get_last_hop_options = function()
-  return M._hop_option_manager.get_from_user_options()
+  return vim.deepcopy(M._last_hop_options)
+end
+
+---@return RH_HopOptions|nil
+M.get_last_operator_pending_hop_options = function()
+  return vim.deepcopy(M._last_operator_pending_hop_options)
 end
 
 return M
