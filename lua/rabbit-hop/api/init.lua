@@ -1,5 +1,5 @@
-local hop = require(RH_ROOT .. ".api.hop")
-local user_options_utils = require(RH_ROOT .. ".api.user-options-utils")
+local hop = require(... .. ".hop")
+local user_options_utils = require(... .. ".user-options-utils")
 
 local M = {}
 

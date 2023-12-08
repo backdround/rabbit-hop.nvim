@@ -5,9 +5,6 @@ globals:
   vim:
     any: true
 
-  RH_ROOT:
-    any: true
-
   describe:
     args:
       - type: string

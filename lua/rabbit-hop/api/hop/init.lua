@@ -1,5 +1,5 @@
-local position = require(RH_ROOT .. ".api.hop.position")
-local search_pattern = require(RH_ROOT .. ".api.hop/search-pattern")
+local position = require(... .. ".position")
+local search_pattern = require(... .. ".search-pattern")
 
 ---@return "operator-pending"|"visual"|"normal"
 local mode = function()

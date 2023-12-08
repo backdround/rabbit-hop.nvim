@@ -1,5 +1,4 @@
-RH_ROOT = "rabbit-hop"
-local hop_api = require(RH_ROOT .. ".api")
+local hop_api = require("rabbit-hop.api")
 
 local M = {}
 

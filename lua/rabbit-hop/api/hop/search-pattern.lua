@@ -1,4 +1,5 @@
-local position = require(RH_ROOT .. ".api.hop.position")
+-- require("./position/")
+local position = require(({...})[1]:gsub("[^.]+$", "") .. "position")
 
 ---@class RH_PatternPosition
 ---@field start_position RH_Position
