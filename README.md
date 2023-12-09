@@ -1,4 +1,14 @@
 # Rabbit-hop.nvim
+
+<p align="center">
+  <a href="https://github.com/backdround/rabbit-hop.nvim/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/backdround/rabbit-hop.nvim/tests.yaml?branch=main&label=Tests&style=flat-square" alt="Tests">
+  </a>
+  <a href="https://github.com/backdround/rabbit-hop.nvim/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/backdround/rabbit-hop.nvim/docs.yaml?branch=main&label=Doc%20generation&status=gen&style=flat-square" alt="Tests">
+  </a>
+</p>
+
 It's a Neovim plugin that provides a flexible ability to jump to a user
 defined vim-pattern (quotes, brackets, numbers).
 
