@@ -1,4 +1,3 @@
-local rh = require("rabbit-hop")
 local M = {}
 
 ---Formats text and split to lines.
@@ -104,20 +103,6 @@ end
 M.set_cursor = function(line, column)
   column = vim.fn.virtcol2col(0, line, column + 1) - 1
   vim.api.nvim_win_set_cursor(0, { line, column })
-end
-
----Performs the rh.hop through a keymap
----@param direction "forward"|"backward"
----@param offset "pre"|"start"|"end"|"post"
----@param pattern string
----@param additional_options? table
-M.hop = function(direction, offset, pattern, additional_options)
-  local hop_options = additional_options or {}
-  hop_options.direction = direction
-  hop_options.offset = offset
-  hop_options.pattern = pattern
-
-  M.perform_through_keymap(rh.hop, true, hop_options)
 end
 
 ---Performs a given function with given arguments through a keymap
