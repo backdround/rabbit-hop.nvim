@@ -54,7 +54,7 @@ local assert_count = function(count)
 end
 
 ---Options that an api user gives
----@class RH_UserHopOptions
+---@class RH_ApiHopOptions
 ---@field pattern string pattern to search
 ---@field direction? "forward"|"backward" direction to search a given pattern
 ---@field offset? "pre"|"start"|"end"|"post" offset to cursor to place
@@ -62,7 +62,7 @@ end
 ---@field count number? count of hops to perform
 
 ---Checks and fills empty fields with default values
----@param options RH_UserHopOptions
+---@param options RH_ApiHopOptions
 ---@return RH_HopOptions
 M.get_hop_options = function(options)
   if type(options) ~= "table" then
