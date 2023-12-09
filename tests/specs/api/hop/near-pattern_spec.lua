@@ -70,8 +70,24 @@ describe("near-pattern-hop", function()
   end)
 
   describe("insert-mode", function()
-    -- add tests for
-    -- insert_mode_target_side = "left"
-    -- insert_mode_target_side = "right"
+    it('insert_mode_target_side = "left"', function()
+      h.get_preset("aaaa", { 1, 0 })()
+      h.trigger_insert()
+      api_helpers.hop("forward", "start", "a", {
+        insert_mode_target_side = "left",
+        count = 2,
+      })
+      assert.cursor_at(1, 1)
+    end)
+
+    it('insert_mode_target_side = "right"', function()
+      h.get_preset("aaaa", { 1, 0 })()
+      h.trigger_insert()
+      api_helpers.hop("forward", "start", "a", {
+        insert_mode_target_side = "right",
+        count = 2,
+      })
+      assert.cursor_at(1, 1)
+    end)
   end)
 end)
