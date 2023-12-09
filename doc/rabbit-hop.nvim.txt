@@ -11,6 +11,11 @@ Table of Contents                          *rabbit-hop.nvim-table-of-contents*
 ==============================================================================
 1. Rabbit-hop.nvim                           *rabbit-hop.nvim-rabbit-hop.nvim*
 
+
+
+
+
+
 It’s a Neovim plugin that provides a flexible ability to jump to a user
 defined vim-pattern (quotes, brackets, numbers).
 
