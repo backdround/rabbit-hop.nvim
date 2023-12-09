@@ -67,4 +67,10 @@ describe("near-pattern-hop", function()
       assert.cursor_at(1, 1)
     end)
   end)
+
+  describe("insert-mode", function()
+    -- add tests for
+    -- insert_mode_target_side = "left"
+    -- insert_mode_target_side = "right"
+  end)
 end)

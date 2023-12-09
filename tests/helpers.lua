@@ -74,6 +74,10 @@ M.trigger_visual = function()
   vim.api.nvim_feedkeys("v", "n", false)
 end
 
+M.trigger_insert = function()
+  vim.api.nvim_feedkeys("i", "n", false)
+end
+
 M.trigger_delete = function()
   vim.api.nvim_feedkeys("d", "n", false)
 end
@@ -106,8 +110,9 @@ end
 ---@param direction "forward"|"backward"
 ---@param offset "pre"|"start"|"end"|"post"
 ---@param pattern string
-M.hop = function(direction, offset, pattern)
-  local hop_options = {}
+---@param additional_options? table
+M.hop = function(direction, offset, pattern, additional_options)
+  local hop_options = additional_options or {}
   hop_options.direction = direction
   hop_options.offset = offset
   hop_options.pattern = pattern
@@ -122,7 +127,7 @@ end
 M.perform_through_keymap = function(fn, wait_for_finish, ...)
   local args = {...}
   local map_label = "<Plug>(perform_through_keymap)"
-  vim.keymap.set({ "n", "o", "x" }, map_label, function()
+  vim.keymap.set({ "n", "o", "x", "i" }, map_label, function()
     fn(unpack(args))
   end)
   local keys = vim.api.nvim_replace_termcodes(map_label, true, false, true)
