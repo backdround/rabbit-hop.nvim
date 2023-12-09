@@ -16,6 +16,14 @@ The plugin:
 <!-- panvimdoc-ignore-start -->
 
 ### Preview
+#### Jump inside / outside round brackets
+<img src="https://github.com/backdround/rabbit-hop.nvim/assets/17349169/bb300bcd-2b87-448c-bb13-483659f456af" width="600px" />
+
+#### Jump inside / outside quotes
+<img src="https://github.com/backdround/rabbit-hop.nvim/assets/17349169/d615afb0-810f-4327-9a07-fa14fdadd9c7" width="600px" />
+
+#### Jump to a number
+<img src="https://github.com/backdround/rabbit-hop.nvim/assets/17349169/60596f0c-c513-458c-80dc-734bf3d3f609" width="600px" />
 
 ---
 
