@@ -3,6 +3,7 @@ It's a Neovim plugin that provides a flexible ability to jump to a user
 defined vim-pattern (quotes, brackets, numbers).
 
 Jumps work:
+
 - in multiline;
 - in `normal`, `visual`, `operator-pending` and `insert` modes;
 - with non-ascii text;
@@ -10,10 +11,13 @@ Jumps work:
 - with the `dot` repetition.
 
 The plugin:
+
 - Can be used as api for other plugins;
 - Should be stable in corner cases (has lots of tests).
 
 <!-- panvimdoc-ignore-start -->
+
+***
 
 ### Preview
 #### Jump inside / outside round brackets
@@ -25,7 +29,7 @@ The plugin:
 #### Jump to a number
 <img src="https://github.com/backdround/rabbit-hop.nvim/assets/17349169/60596f0c-c513-458c-80dc-734bf3d3f609" width="600px" />
 
----
+***
 
 <!-- panvimdoc-ignore-end -->
 
@@ -127,7 +131,11 @@ end)
 
 </details>
 
+<!-- panvimdoc-ignore-start -->
 
+***
+
+<!-- panvimdoc-ignore-end -->
 ### Plugin hop options
 
 | Option | Default | Possible | Description |
