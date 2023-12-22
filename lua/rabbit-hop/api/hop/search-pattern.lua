@@ -31,6 +31,12 @@ local function search_pattern(pattern, direction, count, is_suitable, n_is_point
     end
     vim.fn.searchpos(pattern, "nWce", nil, nil, find_end_position)
 
+    -- It happens in ^ or $ cases.
+    if potential_found_pattern.end_position == nil then
+      potential_found_pattern.end_position =
+        potential_found_pattern.start_position
+    end
+
     -- Check the potential position
     if not is_suitable(potential_found_pattern) then
       return 1
