@@ -14,7 +14,7 @@ M.virtual_line_length = function(line_index, n_is_pointable)
   return length - 1
 end
 
----@Converts a virtual position to a byte position.
+---Converts a virtual position to a byte position.
 ---@param virtual_position number[]
 ---@return number[]
 M.from_virtual_to_byte = function(virtual_position)
@@ -33,12 +33,32 @@ M.from_virtual_to_byte = function(virtual_position)
   return { line, column }
 end
 
----@Converts a byte position to a virtual position.
+---Converts a byte position to a virtual position.
 ---@param byte_position number[]
 ---@return number[]
 M.from_byte_to_virtual = function(byte_position)
   local line = byte_position[1]
   local column = vim.fn.virtcol(byte_position)
+  return { line, column }
+end
+
+---Places the given position in bound of the current buffer.
+---@param position number[]
+---@param n_is_pointable boolean position can point to a "\n"
+---@return number[]
+M.place_in_bounds = function(position, n_is_pointable)
+  local line = position[1]
+  local column = position[2]
+
+  local max_column = vim.fn.virtcol({ line, "$" })
+  if not n_is_pointable then
+    max_column = max_column - 1
+  end
+
+  if column > max_column then
+    column = max_column
+  end
+
   return { line, column }
 end
 

@@ -4,9 +4,9 @@ local h = require("tests.helpers")
 require("tests.custom-asserts").register()
 
 describe("corner cases", function()
-  before_each(h.get_preset("aa aa aaaaa aa aa", { 1, 8 }))
-
   describe("hop from the middle of the pattern", function()
+    before_each(h.get_preset("aa aa aaaaa aa aa", { 1, 8 }))
+
     it("forward to the end", function()
       api_helpers.hop("forward", "end", "\\va+")
       assert.cursor_at(1, 10)
@@ -29,24 +29,30 @@ describe("corner cases", function()
   end)
 
   describe("hop to the start or end of a line", function()
+    before_each(h.get_preset([[
+      multi
+       | line
+      text
+    ]], { 2, 1 }))
+
     it("the start of the start of a line", function()
       api_helpers.hop("backward", "start", "\\v^")
-      assert.cursor_at(1, 0)
+      assert.cursor_at(2, 0)
     end)
 
     it("the end of the start of a line", function()
       api_helpers.hop("backward", "end", "\\v^")
-      assert.cursor_at(1, 0)
+      assert.cursor_at(2, 0)
     end)
 
     it("the start of the end of a line", function()
       api_helpers.hop("forward", "start", "\\v$")
-      assert.cursor_at(1, 16)
+      assert.cursor_at(2, 6)
     end)
 
     it("the end of the end of a line", function()
       api_helpers.hop("forward", "end", "\\v$")
-      assert.cursor_at(1, 16)
+      assert.cursor_at(2, 6)
     end)
   end)
 end)

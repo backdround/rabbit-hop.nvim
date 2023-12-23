@@ -21,21 +21,19 @@ local function search_pattern(pattern, direction, count, is_suitable, n_is_point
   local search_callback = function()
     -- Get potential found pattern
     local potential_found_pattern = {
-      start_position = position.from_cursor(n_is_pointable)
+      start_position = position.from_cursor(n_is_pointable),
+      end_position = nil,
     }
 
-    local find_end_position = function()
+    -- The current cursor placement might differ from the start of the pattern
+    -- in case the pattern is "\\v$".
+    potential_found_pattern.start_position.set_cursor()
+
+    vim.fn.searchpos(pattern, "nWce", nil, nil, function()
       potential_found_pattern.end_position =
         position.from_cursor(n_is_pointable)
       return 0
-    end
-    vim.fn.searchpos(pattern, "nWce", nil, nil, find_end_position)
-
-    -- It happens in ^ or $ cases.
-    if potential_found_pattern.end_position == nil then
-      potential_found_pattern.end_position =
-        potential_found_pattern.start_position
-    end
+    end)
 
     -- Check the potential position
     if not is_suitable(potential_found_pattern) then

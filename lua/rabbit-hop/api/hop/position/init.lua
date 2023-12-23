@@ -106,6 +106,7 @@ local M = {}
 M.from_cursor = function(n_is_pointable)
   local byte_position = vim.api.nvim_win_get_cursor(0)
   local position = utils.from_byte_to_virtual(byte_position)
+  position = utils.place_in_bounds(position, n_is_pointable)
   return new_position(position[1], position[2], n_is_pointable)
 end
 
