@@ -1,17 +1,32 @@
 local M = {}
 
+---@return "operator-pending"|"visual"|"normal"|"insert"
+M.mode = function()
+  local m = tostring(vim.fn.mode(true))
+
+  if m:find("o") then
+    return "operator-pending"
+  elseif m:find("[vV]") then
+    return "visual"
+  elseif m:find("i") then
+    return "insert"
+  else
+    return "normal"
+  end
+end
+
 ---Returns line size in virtual columns.
 ---@param line_index number
 ---@param n_is_pointable boolean position can point to a "\n"
 ---@return number
 M.virtual_line_length = function(line_index, n_is_pointable)
-  local length = vim.fn.virtcol({ line_index, "$" }) - 1
+  local length = vim.fn.virtcol({ line_index, "$" })
 
   if n_is_pointable then
     return length
   end
 
-  return length - 1
+  return math.max(1, length - 1)
 end
 
 ---Converts a virtual position to a byte position.
@@ -24,10 +39,8 @@ M.from_virtual_to_byte = function(virtual_position)
   -- vim.fn.virtcol2col converts position to a '\n' the same way
   -- as if it converts position to a last character.
   -- so, do it manually:
-  if virtual_position[2] == M.virtual_line_length(line, true) then
-    local current_line_size =
-      vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:len()
-    column = current_line_size + 1
+  if virtual_position[2] == M.virtual_line_length(line, true) - 1 then
+    column = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:len()
   end
 
   return { line, column }
@@ -43,21 +56,28 @@ M.from_byte_to_virtual = function(byte_position)
 end
 
 ---Places the given position in bound of the current buffer.
----@param position number[]
+---@param position number[] virtual position.
 ---@param n_is_pointable boolean position can point to a "\n"
 ---@return number[]
 M.place_in_bounds = function(position, n_is_pointable)
   local line = position[1]
   local column = position[2]
 
-  local max_column = vim.fn.virtcol({ line, "$" })
-  if not n_is_pointable then
-    max_column = max_column - 1
+  local last_line = vim.api.nvim_buf_line_count(0)
+  if line > last_line then
+    return {
+      last_line,
+      M.virtual_line_length(last_line, n_is_pointable) - 1,
+    }
   end
 
-  if column > max_column then
-    column = max_column
+  if line < 1 then
+    return { 1, 0, }
   end
+
+  local max_column = M.virtual_line_length(line, n_is_pointable) - 1
+  column = math.min(column, max_column)
+  column = math.max(column, 0)
 
   return { line, column }
 end
