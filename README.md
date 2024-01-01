@@ -92,8 +92,7 @@ end_position() | PI_Position | The end position of the current match.
 Method / Member | Return type | Description
 -- | -- | --
 set_cursor() | - | Sets the cursor to the position.
-select_region_to(position) | - | Selects a region between the current and another position. It works only in `normal` or `visual` mode.
-perform_operator_to(position) | - | Sets a region between the current and another position for operator to perform. It works only in `operator pending` mode.
+select_region_to(position) | - | Selects a region between the current and another position.
 before_cursor() | boolean | Indicates that the current position is before the cursor.
 after_cursor() | boolean | Indicates that the current position is after the cursor.
 move(offset) | - | Moves the position according to the offset. If offset > 0 then it moves forward else backward.

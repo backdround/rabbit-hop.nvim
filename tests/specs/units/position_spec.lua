@@ -253,16 +253,56 @@ describe("position", function()
         ]])
       end)
 
-      it("error in operator-pending mode", function()
-        local p1 = position.from_coordinates(1, 3, false)
-        local p2 = position.from_coordinates(2, 4, false)
+      describe("in operator-pending mode", function()
+        it("forward", function()
+          local p1 = position.from_coordinates(1, 3, true)
+          local p2 = position.from_coordinates(2, 5, true)
+          h.trigger_delete()
+          h.perform_through_keymap(p1.select_region_to, true, p1, p2)
+          assert.buffer("somhere")
+        end)
 
-        h.trigger_delete()
-        h.perform_through_keymap(function()
-          assert.has_error(function()
-            p2:select_region_to(p1)
+        it("backward", function()
+          local p1 = position.from_coordinates(1, 3, true)
+          local p2 = position.from_coordinates(2, 5, true)
+          h.trigger_delete()
+          h.perform_through_keymap(p2.select_region_to, true, p2, p1)
+          assert.buffer("somhere")
+        end)
+
+        describe("with 'selection' == 'exclusive'", function()
+          it("forward", function()
+            vim.go.selection = "exclusive"
+
+            h.feedkeys("d", false)
+            h.perform_through_keymap(function()
+              local p1 = position.from_coordinates(1, 3, false)
+              local p2 = position.from_coordinates(2, 2, false)
+              p1:select_region_to(p2)
+            end, true)
+
+            assert.buffer([[
+              somds
+              here
+            ]])
           end)
-        end, true)
+
+          it("backward", function()
+            vim.go.selection = "exclusive"
+
+            h.feedkeys("d", false)
+            h.perform_through_keymap(function()
+              local p1 = position.from_coordinates(1, 3, false)
+              local p2 = position.from_coordinates(2, 2, false)
+              p2:select_region_to(p1)
+            end, true)
+
+            assert.buffer([[
+              somds
+              here
+            ]])
+          end)
+        end)
       end)
 
       describe("should work after", function()
@@ -300,59 +340,6 @@ describe("position", function()
           select_region({ 1, 3 }, { 2, 2 })
           assert.selected_region({ 1, 3 }, { 2, 2 })
           assert.are.same("v", vim.fn.visualmode())
-        end)
-      end)
-    end)
-
-    describe("perform_operator_to", function()
-      it("forward", function()
-        local p1 = position.from_coordinates(1, 3, true)
-        local p2 = position.from_coordinates(2, 5, true)
-        h.trigger_delete()
-        h.perform_through_keymap(p1.perform_operator_to, true, p1, p2)
-        assert.buffer("somhere")
-      end)
-
-      it("backward", function()
-        local p1 = position.from_coordinates(1, 3, true)
-        local p2 = position.from_coordinates(2, 5, true)
-        h.trigger_delete()
-        h.perform_through_keymap(p2.perform_operator_to, true, p2, p1)
-        assert.buffer("somhere")
-      end)
-
-      describe("should work after", function()
-        local delete_region = function(coords1, coords2)
-          local p1 = position.from_coordinates(coords1[1], coords1[2], true)
-          local p2 = position.from_coordinates(coords2[1], coords2[2], true)
-          h.trigger_delete()
-          h.perform_through_keymap(p2.perform_operator_to, true, p2, p1)
-        end
-
-        it("none visual selection", function()
-          delete_region({ 1, 3 }, { 2, 5 })
-          assert.buffer("somhere")
-        end)
-
-        it("linewise visual selection", function()
-          h.feedkeys("V<esc>", true)
-
-          delete_region({ 1, 3 }, { 2, 5 })
-          assert.buffer("somhere")
-        end)
-
-        it("charwise visual selection", function()
-          h.feedkeys("v<esc>", true)
-
-          delete_region({ 1, 3 }, { 2, 5 })
-          assert.buffer("somhere")
-        end)
-
-        it("blockwise visual selection", function()
-          h.feedkeys("<C-v><esc>", true)
-
-          delete_region({ 1, 3 }, { 2, 5 })
-          assert.buffer("somhere")
         end)
       end)
     end)

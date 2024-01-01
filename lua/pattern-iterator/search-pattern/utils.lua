@@ -20,7 +20,7 @@ end
 ---@return function A function that restores the initial vim state.
 M.prepare_vim_state = function()
   -- Save the current state
-  local saved_position = vim.api.nvim_win_get_cursor(0)
+  local saved_view = vim.fn.winsaveview()
   local saved_virtualedit =
     vim.api.nvim_get_option_value("virtualedit", { scope = "local" })
 
@@ -29,7 +29,7 @@ M.prepare_vim_state = function()
 
   -- Return restore function
   return function()
-    vim.api.nvim_win_set_cursor(0, saved_position)
+    vim.fn.winrestview(saved_view)
     vim.api.nvim_set_option_value(
       "virtualedit",
       saved_virtualedit,
