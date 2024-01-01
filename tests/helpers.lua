@@ -71,6 +71,8 @@ end
 
 M.trigger_visual = function()
   vim.api.nvim_feedkeys("v", "n", false)
+  -- Wait for visual mode to take place.
+  M.perform_through_keymap(function() end, true)
 end
 
 M.trigger_insert = function()

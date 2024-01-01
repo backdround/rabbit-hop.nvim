@@ -5,8 +5,9 @@ local M = {}
 ---@class RH_PluginOptions
 ---@field pattern string
 ---@field direction? "forward"|"backward"
----@field offset? "pre"|"start"|"end"|"post"
----@field insert_mode_target_side? "left"|"right" side to place the cursor in insert mode
+---@field match_position? "start"|"end" Indicates which end of the match to use.
+---@field offset? number Advances final position relatively match_position.
+---@field insert_mode_target_side? "left"|"right" side to place the cursor in insert mode.
 
 ---@param plugin_options RH_PluginOptions
 M.hop = function(plugin_options)

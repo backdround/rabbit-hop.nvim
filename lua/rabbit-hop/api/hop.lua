@@ -18,7 +18,7 @@ end
 
 ---@param opts RH_HopOptions
 ---@param n_is_pointable boolean position can point to a "\n"
----@return RH_Position|nil
+---@return PI_Position|nil
 local function search_target_position(opts, n_is_pointable)
   local iterator_opts = { n_is_pointable = n_is_pointable }
 
@@ -32,57 +32,46 @@ local function search_target_position(opts, n_is_pointable)
     end
   end
 
-  local insert_adjust = function(p)
-    if opts.insert_mode_target_side == "right" then
-      p:move(1)
-    end
+  if iterator == nil then
+    return nil
   end
 
   local apply_offset = function(match)
-    if opts.offset == "start" then
-      local p = match:start_position()
-      insert_adjust(p)
-      return p
-    elseif opts.offset == "end" then
-      local p = match:end_position()
-      insert_adjust(p)
-      return p
+    local p = nil
+    if opts.match_position == "start" then
+      p = match:start_position()
+    else
+      p = match:end_position()
     end
 
-    local shift_right = (opts.direction == "forward" and opts.offset == "post")
-      or (opts.direction == "backward" and opts.offset == "pre")
+    p:move(opts.offset)
 
-    if shift_right then
-      local p = match:end_position()
+    if mode() == "insert" and opts.insert_mode_target_side == "right" then
       p:move(1)
-      insert_adjust(p)
-      return p
-    else
-      local p = match:start_position()
-      p:move(-1)
-      insert_adjust(p)
-      return p
     end
+
+    return p
   end
 
-  local current_position = position.from_cursor(true)
-  local match_is_suitable = function(match)
-    local potential_target_position = apply_offset(match)
-    if opts.direction == "forward" then
-      return potential_target_position > current_position
-    else
-      return potential_target_position < current_position
-    end
-  end
-
+  local final_position = nil
   local count = opts.count
   while true do
-    if match_is_suitable(iterator) then
+    local potential_target_position = apply_offset(iterator)
+
+    local suitable = false
+    if opts.direction == "forward" then
+      suitable = potential_target_position:after_cursor()
+    else
+      suitable = potential_target_position:before_cursor()
+    end
+
+    if suitable then
       count = count - 1
+      final_position = potential_target_position
     end
 
     if count == 0 then
-      return apply_offset(iterator)
+      return final_position
     end
 
     local performed = false
@@ -93,17 +82,18 @@ local function search_target_position(opts, n_is_pointable)
     end
 
     if not performed then
-      return apply_offset(iterator)
+      return final_position
     end
   end
 end
 
 ---Options that describe the hop behaviour.
 ---@class RH_HopOptions
----@field direction "forward"|"backward" direction to search a given pattern
----@field offset "pre"|"start"|"end"|"post" offset of the cursor to the place
----@field pattern string pattern to search
----@field insert_mode_target_side "left"|"right" side to place the cursor in insert mode
+---@field pattern string
+---@field direction "forward"|"backward"
+---@field match_position "start"|"end" Indicates which end of the match to use.
+---@field offset number Advances final position relatively match_position.
+---@field insert_mode_target_side "left"|"right" side to place the cursor in insert mode.
 ---@field count number count of hops to perform
 
 ---Performs a hop to a given pattern
