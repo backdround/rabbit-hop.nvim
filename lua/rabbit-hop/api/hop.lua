@@ -16,26 +16,78 @@ local mode = function()
   end
 end
 
----@param opts RH_HopOptions
+---@param pattern string
+---@param count number
 ---@param n_is_pointable boolean position can point to a "\n"
+---@param apply_offset function
 ---@return PI_Position|nil
-local function search_target_position(opts, n_is_pointable)
+local function search_forward_target_position(pattern, count, n_is_pointable, apply_offset)
   local iterator_opts = { n_is_pointable = n_is_pointable }
 
-  local iterator = pattern_iterator.new_around(opts.pattern, iterator_opts)
-
-  if iterator == nil then
-    if opts.direction == "forward" then
-      iterator = pattern_iterator.new_forward(opts.pattern, iterator_opts)
-    else
-      iterator = pattern_iterator.new_backward(opts.pattern, iterator_opts)
-    end
-  end
+  local iterator = pattern_iterator.new_around(pattern, iterator_opts) or
+    pattern_iterator.new_forward(pattern, iterator_opts)
 
   if iterator == nil then
     return nil
   end
 
+  local final_position = nil
+  while true do
+    local potential_target_position = apply_offset(iterator)
+
+    if potential_target_position:after_cursor() then
+      count = count - 1
+      final_position = potential_target_position
+    end
+
+    if count == 0 or not iterator:next() then
+      return final_position
+    end
+  end
+end
+
+---@param pattern string
+---@param count number
+---@param n_is_pointable boolean position can point to a "\n"
+---@param apply_offset function
+---@return PI_Position|nil
+local function search_backward_target_position(pattern, count, n_is_pointable, apply_offset)
+  local iterator_opts = { n_is_pointable = n_is_pointable }
+
+  local iterator = pattern_iterator.new_around(pattern, iterator_opts) or
+    pattern_iterator.new_backward(pattern, iterator_opts)
+
+  if iterator == nil then
+    return nil
+  end
+
+  local final_position = nil
+  while true do
+    local potential_target_position = apply_offset(iterator)
+
+    if potential_target_position:before_cursor() then
+      count = count - 1
+      final_position = potential_target_position
+    end
+
+    if count == 0 or not iterator:previous() then
+      return final_position
+    end
+  end
+end
+
+---Options that describe the hop behaviour.
+---@class RH_HopOptions
+---@field pattern string
+---@field direction "forward"|"backward"
+---@field match_position "start"|"end" Indicates which end of the match to use.
+---@field offset number Advances final position relatively match_position.
+---@field insert_mode_target_side "left"|"right" side to place the cursor in insert mode.
+---@field count number count of hops to perform
+
+---Performs a hop to a given pattern
+---@param opts RH_HopOptions
+local perform = function(opts)
   local apply_offset = function(match)
     local p = nil
     if opts.match_position == "start" then
@@ -59,54 +111,24 @@ local function search_target_position(opts, n_is_pointable)
     return p
   end
 
-  local final_position = nil
-  local count = opts.count
-  while true do
-    local potential_target_position = apply_offset(iterator)
-
-    local suitable = false
-    if opts.direction == "forward" then
-      suitable = potential_target_position:after_cursor()
-    else
-      suitable = potential_target_position:before_cursor()
-    end
-
-    if suitable then
-      count = count - 1
-      final_position = potential_target_position
-    end
-
-    if count == 0 then
-      return final_position
-    end
-
-    local performed = false
-    if opts.direction == "forward" then
-      performed = iterator:next()
-    else
-      performed = iterator:previous()
-    end
-
-    if not performed then
-      return final_position
-    end
-  end
-end
-
----Options that describe the hop behaviour.
----@class RH_HopOptions
----@field pattern string
----@field direction "forward"|"backward"
----@field match_position "start"|"end" Indicates which end of the match to use.
----@field offset number Advances final position relatively match_position.
----@field insert_mode_target_side "left"|"right" side to place the cursor in insert mode.
----@field count number count of hops to perform
-
----Performs a hop to a given pattern
----@param opts RH_HopOptions
-local perform = function(opts)
   local n_is_pointable = mode() ~= "normal"
-  local target_position = search_target_position(opts, n_is_pointable)
+
+  local target_position = nil
+  if opts.direction == "forward" then
+    target_position = search_forward_target_position(
+      opts.pattern,
+      opts.count,
+      n_is_pointable,
+      apply_offset
+    )
+  else
+    target_position = search_backward_target_position(
+      opts.pattern,
+      opts.count,
+      n_is_pointable,
+      apply_offset
+    )
+  end
 
   if not target_position then
     return
