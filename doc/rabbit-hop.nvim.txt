@@ -1,4 +1,4 @@
-*rabbit-hop.nvim.txt*             For NVIM v0.8.0            Last change: 2023
+*rabbit-hop.nvim.txt*             For NVIM v0.8.0            Last change: 2024
 
 ==============================================================================
 Table of Contents                          *rabbit-hop.nvim-table-of-contents*
