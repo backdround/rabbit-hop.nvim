@@ -15,6 +15,7 @@ M.hop = function(plugin_options)
   local api_options = {
     pattern = plugin_options.pattern,
     direction = plugin_options.direction,
+    match_position = plugin_options.match_position,
     offset = plugin_options.offset,
     insert_mode_target_side = plugin_options.insert_mode_target_side,
   }
