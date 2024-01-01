@@ -46,8 +46,14 @@ local function search_target_position(opts, n_is_pointable)
 
     p:move(opts.offset)
 
-    if mode() == "insert" and opts.insert_mode_target_side == "right" then
-      p:move(1)
+    if mode() == "insert" then
+      if opts.insert_mode_target_side == "right" then
+        p:move(1)
+      end
+    elseif mode() == "visual" then
+      if vim.go.selection == "exclusive" and opts.direction == "forward" then
+        p:move(1)
+      end
     end
 
     return p
@@ -104,14 +110,6 @@ local perform = function(opts)
 
   if not target_position then
     return
-  end
-
-  if
-    mode() == "visual"
-    and vim.go.selection == "exclusive"
-    and opts.direction == "forward"
-  then
-    target_position:move(1)
   end
 
   if mode() ~= "operator-pending" then
