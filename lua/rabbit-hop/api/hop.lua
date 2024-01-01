@@ -144,7 +144,7 @@ local perform = function(opts)
     start_position:move(-1)
   end
 
-  start_position:perform_operator_to(target_position)
+  start_position:select_region_to(target_position)
 end
 
 return perform
