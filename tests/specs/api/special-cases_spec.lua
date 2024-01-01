@@ -9,6 +9,39 @@ describe("special-cases", function()
     aa aa
   ]], { 1, 6 }))
 
+  describe("\\n cases", function()
+    describe("normal mode", function()
+      it("without offset", function()
+        hop("\\v$", "forward", "start")
+        assert.cursor_at(1, 12)
+      end)
+
+      it("with offset", function()
+        hop("\\v$", "forward", "start", { offset = 1 })
+        assert.cursor_at(2, 0)
+      end)
+    end)
+
+    it("visual mode", function()
+      h.trigger_visual()
+      hop("\\v$", "forward", "start")
+      assert.selected_region({ 1, 6 }, { 1, 13 })
+    end)
+
+    it("operator-pending mode", function()
+      h.trigger_delete()
+      hop("\\v$", "forward", "start")
+      assert.buffer("aa aaBaa aa")
+    end)
+
+    it("insert mode", function()
+      h.trigger_insert()
+      hop("\\v$", "forward", "start")
+      h.reset_mode()
+      assert.cursor_at(1, 12)
+    end)
+  end)
+
   describe("should work properly with 'selection' == 'exclusive'", function()
     before_each(function()
       vim.go.selection = "exclusive"
