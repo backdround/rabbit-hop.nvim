@@ -42,6 +42,20 @@ describe("special-cases", function()
     end)
   end)
 
+  it("multi-byte text", function()
+    h.get_preset("некоторый текст", { 1, 1 })()
+    hop("\\v[[:lower:]]+", "forward", "end")
+    assert.cursor_at(1, 9)
+  end)
+
+  it("multi-column text", function()
+    local double_tab = "		"
+    local buffer = "text" .. double_tab .. "here"
+    h.get_preset(buffer, { 1, 1 })()
+    hop("\\v[[:lower:]]+", "forward", "start")
+    assert.cursor_at(1, 7)
+  end)
+
   describe("should work properly with 'selection' == 'exclusive'", function()
     before_each(function()
       vim.go.selection = "exclusive"
