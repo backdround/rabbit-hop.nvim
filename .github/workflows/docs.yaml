@@ -26,7 +26,7 @@ jobs:
       - name: panvimdoc
         uses: kdheepak/panvimdoc@main
         with:
-          vimdoc: rabbit-hop.nvim
+          vimdoc: pattern-iterator.nvim
           pandoc: /github/home/README.md
           titledatepattern: "%Y"
 
