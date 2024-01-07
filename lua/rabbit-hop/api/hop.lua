@@ -141,7 +141,7 @@ local perform = function(opts)
   end
 
   local start_position = position.from_cursor(n_is_pointable)
-  if opts.direction == "backward" then
+  if target_position < start_position then
     start_position:move(-1)
   end
 
