@@ -1,5 +1,6 @@
-local pattern_iterator = require(({ ... })[1]:gsub("[^.]+%.[^.]+$", "") .. "pattern-iterator")
-local position = require(({ ... })[1]:gsub("[^.]+%.[^.]+$", "") .. "pattern-iterator.position")
+local current_plugin_path = ({ ... })[1]:gsub("[^.]+%.[^.]+$", "")
+local pattern_iterator = require(current_plugin_path .. "pattern-iterator.lua.pattern-iterator")
+local position = require(current_plugin_path .. "pattern-iterator.lua.pattern-iterator.position")
 
 ---@return "operator-pending"|"visual"|"normal"|"insert"
 local mode = function()
