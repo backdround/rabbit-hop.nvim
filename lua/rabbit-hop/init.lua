@@ -1,4 +1,7 @@
-local hop_api = require("rabbit-hop.api")
+local lazy_rabbit_hop = function(options)
+  local rabbit_hop = require("rabbit-hop.api").hop
+  return rabbit_hop(options)
+end
 
 local M = {}
 
@@ -29,7 +32,7 @@ M.hop = function(plugin_options)
     api_options.count = 1
   end
 
-  return hop_api.hop(api_options)
+  return lazy_rabbit_hop(api_options)
 end
 
 return M
