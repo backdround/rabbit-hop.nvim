@@ -175,6 +175,6 @@ local performed = hop(options)
 | - | - | `"from-cursor"` | Accepts the position at the cursor and all positions in the direction of the hop after the cursor.
 | - | - | `"any"` | Accepts all positions even if a position moves the cursor backward from hop direction.
 | `fold_policy?` | `"hop-once"` | `"ignore"`, `"hop-once"`, `"hop-in-and-open"` | Decides how to deal with folds.
-| - | - | `"hop-once` | Accept a position in a fold only once. If there is no position in a fold then hops through.
-| - | - | `"ignore` | Ignores all potential positions in folds.
-| - | - | `hop-in-and-open` | Accepts all positions in folds. If a target position is in a fold then, hops at it and opens the fold.
+| - | - | `"hop-once"` | Accept a position in a fold only once. If there is no position in a fold then hops through.
+| - | - | `"ignore"` | Ignores all potential positions in folds.
+| - | - | `"hop-in-and-open"` | Accepts all positions in folds. If a target position is in a fold then, hops at it and opens the fold.
