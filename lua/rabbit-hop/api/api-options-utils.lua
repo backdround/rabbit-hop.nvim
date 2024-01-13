@@ -58,10 +58,15 @@ local assert_count = function(count)
 end
 
 local assert_accept_policy = function(accept_policy)
-  if accept_policy ~= nil and type(accept_policy) ~= "string" then
+  if
+    accept_policy ~= nil
+    and accept_policy ~= "from-after-cursor"
+    and accept_policy ~= "from-cursor"
+    and accept_policy ~= "any"
+  then
     error(
       'accept_policy must be "from-after-cursor"|"from-cursor"|"any"|nil, but it is: '
-        .. tostring(type(accept_policy))
+        .. tostring(accept_policy)
     )
   end
 end
