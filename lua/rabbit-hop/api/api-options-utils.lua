@@ -84,12 +84,12 @@ end
 ---@class RH_ApiHopOptions
 ---@field pattern string
 ---@field direction? "forward"|"backward"
----@field match_position? "start"|"end" Indicates which end of the match to use.
+---@field match_position? "start"|"end" Sets which end of the match to use.
 ---@field offset? number Advances final position relatively match_position.
 ---@field insert_mode_target_side? "left"|"right" side to place the cursor in insert mode.
 ---@field accept_policy? "from-after-cursor"|"from-cursor"|"any" Indicates whether a potential position should be accepted.
 ---@field fold_policy? "ignore"|"hop-once"|"hop-in-and-open" Decides how to deal with folds.
----@field count number? count of hops to perform
+---@field count? number count of hops to perform.
 
 ---Checks and fills empty fields with default values
 ---@param options RH_ApiHopOptions
