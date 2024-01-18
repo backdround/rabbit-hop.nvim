@@ -19,7 +19,7 @@ M.hop = function(plugin_options)
     insert_mode_target_side = plugin_options.insert_mode_target_side,
     accept_policy = plugin_options.accept_policy,
     fold_policy = plugin_options.fold_policy,
-    count = vim.v.count1
+    count = plugin_options.count or vim.v.count1,
   }
 
   return lazy_rabbit_hop(api_options)
